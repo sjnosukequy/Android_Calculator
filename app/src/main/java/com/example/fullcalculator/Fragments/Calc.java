@@ -1,18 +1,24 @@
-package com.example.calculator;
+package com.example.fullcalculator.Fragments;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.res.Configuration;
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.fullcalculator.R;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 
-public class MainActivity extends AppCompatActivity {
+public class Calc extends Fragment {
     private TextView Dis ;
     private TextView Res ;
     private TextView Sign ;
@@ -21,12 +27,13 @@ public class MainActivity extends AppCompatActivity {
     private BigDecimal Disfloat = new BigDecimal(0);
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Dis = findViewById(R.id.solution);
-        Res = findViewById(R.id.result);
-        Sign = findViewById(R.id.sign);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view =  inflater.inflate(R.layout.fragment_calc, container, false);
+        Dis = view.findViewById(R.id.solution);
+        Res = view.findViewById(R.id.result);
+        Sign = view.findViewById(R.id.sign);
         Action = "";
         if(savedInstanceState != null){
             Dis.setText(savedInstanceState.getString("Dis"));
@@ -37,9 +44,47 @@ public class MainActivity extends AppCompatActivity {
             Resfloat = new BigDecimal(Res.getText().toString());
             Disfloat= new BigDecimal(Dis.getText().toString());
         }
+        SetFunc(view);
+        return view;
     }
 
-    protected void onSaveInstanceState(Bundle icicle) {
+    public  void SetFunc(View view){
+        view.findViewById(R.id.Butt_C).setOnClickListener(this::DelButt);
+        view.findViewById(R.id.Butt_Percent).setOnClickListener(this::ActionButt);
+        view.findViewById(R.id.Butt_00).setOnClickListener(this::numButt);
+        view.findViewById(R.id.Butt_Dev).setOnClickListener(this::ActionButt);
+
+        view.findViewById(R.id.Butt_7).setOnClickListener(this::numButt);
+        view.findViewById(R.id.Butt_8).setOnClickListener(this::numButt);
+        view.findViewById(R.id.Butt_9).setOnClickListener(this::numButt);
+        view.findViewById(R.id.Butt_Multiply).setOnClickListener(this::ActionButt);
+
+        view.findViewById(R.id.Butt_4).setOnClickListener(this::numButt);
+        view.findViewById(R.id.Butt_5).setOnClickListener(this::numButt);
+        view.findViewById(R.id.Butt_6).setOnClickListener(this::numButt);
+        view.findViewById(R.id.Butt_Plus).setOnClickListener(this::ActionButt);
+
+        view.findViewById(R.id.Butt_1).setOnClickListener(this::numButt);
+        view.findViewById(R.id.Butt_2).setOnClickListener(this::numButt);
+        view.findViewById(R.id.Butt_3).setOnClickListener(this::numButt);
+        view.findViewById(R.id.Butt_Minus).setOnClickListener(this::ActionButt);
+
+        view.findViewById(R.id.Butt_AC).setOnClickListener(this::ClearButt);
+        view.findViewById(R.id.Butt_0).setOnClickListener(this::numButt);
+        view.findViewById(R.id.Butt_Power).setOnClickListener(this::ActionButt);
+        view.findViewById(R.id.Butt_Equal).setOnClickListener(this::Equal);
+
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            view.findViewById(R.id.Butt_sin).setOnClickListener(this::ActionButt);
+            view.findViewById(R.id.Butt_cos).setOnClickListener(this::ActionButt);
+            view.findViewById(R.id.Butt_tan).setOnClickListener(this::ActionButt);
+            view.findViewById(R.id.Butt_cot).setOnClickListener(this::ActionButt);
+            view.findViewById(R.id.Butt_log).setOnClickListener(this::ActionButt);
+        }
+    }
+
+    public void onSaveInstanceState(Bundle icicle) {
         super.onSaveInstanceState(icicle);
         icicle.putString("Dis", Dis.getText().toString());
         icicle.putString("Res", Res.getText().toString() );
@@ -67,9 +112,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Dis.setText(Round( String.valueOf(Disfloat)) );
-     }
+    }
 
-     public void ActionButt(View v){
+    public void ActionButt(View v){
         if(Action.equals("")){
             Button b = (Button)  v;
 
@@ -85,18 +130,18 @@ public class MainActivity extends AppCompatActivity {
             String temp =  Round( String.valueOf(Resfloat) );
             Res.setText(temp);
         }
-     }
+    }
 
-     public void ClearButt(View V){
+    public void ClearButt(View V){
         Action = "";
         Resfloat = new BigDecimal(0);
         Disfloat = new BigDecimal(0);
         Dis.setText("0");
         Res.setText("0");
         Sign.setText("");
-     }
+    }
 
-     public void DelButt(View v){
+    public void DelButt(View v){
         String temp = Dis.getText().toString();
         if(temp.length() > 1)
         {
@@ -108,16 +153,16 @@ public class MainActivity extends AppCompatActivity {
             Disfloat = new BigDecimal(0);
             Dis.setText("0");
         }
-     }
+    }
 
-     public void SoftReset(){
-         Action = "";
-         Sign.setText("");
-         Dis.setText("0");
-         Disfloat = new BigDecimal(0);
-     }
+    public void SoftReset(){
+        Action = "";
+        Sign.setText("");
+        Dis.setText("0");
+        Disfloat = new BigDecimal(0);
+    }
 
-     public void Equal(View v){
+    public void Equal(View v){
         switch (Action){
             case "cot": {
                 try{
@@ -125,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 catch (Exception  e){
                     Resfloat = new BigDecimal(0);
-                    Toast.makeText(this,  "ILLEGAL",  Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),  "ILLEGAL",  Toast.LENGTH_LONG).show();
                 }
                 Res.setText(String.valueOf(Resfloat));
                 SoftReset();
@@ -207,9 +252,10 @@ public class MainActivity extends AppCompatActivity {
                     SoftReset();
                 }
                 else
-                    Toast.makeText(this,  "exponent is too large must be < 7",  Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),  "exponent is too large must be < 7",  Toast.LENGTH_LONG).show();
                 break;
             }
         }
-     }
+    }
+
 }

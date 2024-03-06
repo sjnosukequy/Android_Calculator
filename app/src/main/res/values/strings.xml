@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">Calculator</string>
+    <string name="app_name">Full Calculator</string>
+    <string name="nav_Calc">Calculator</string>
+    <string name="nav_BMI">BMI Calculator</string>
+    <string name="nav_Money">Currency Exchange Calculator</string>
+
+    <string name="nav_Drawer_open">Open Nav</string>
+    <string name="nav_Drawer_close">Close Nav</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
